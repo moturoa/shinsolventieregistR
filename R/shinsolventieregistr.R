@@ -55,13 +55,14 @@ get_unnested_df_by_place <- function(rownr, plaatsnaam, data){
   if(nrow(data)>0){
     row <- data[rownr,]
     adressen <- data.frame(jsonlite::stream_in(textConnection(row$adressen)))
+    pubdat <- jsonlite::stream_in(textConnection(row$recente_publicatie))
     for (i in 1:length(adressen)){
       cur_naam <- adressen[[glue("adres{i}")]][["Plaats"]]
       if(cur_naam == plaatsnaam){
         insolventie_nummer = row$insolventie_nummer
         kvk_nummer <- row$kvk_nummer
         bedrijfsnaam <- row$bedrijfs_naam
-        publicate_datum <- row$recente_publicatie
+        publicatie_datum <- pubdat$PublicatieDatum
         straat <- adressen[[glue("adres{i}")]][["Straat"]]
         huisnr <- adressen[[glue("adres{i}")]][["HuisNummer"]]
         huisnrtoevoeging = adressen[[glue("adres{i}")]][["HuisNummerToevoegingen"]]
@@ -70,7 +71,7 @@ get_unnested_df_by_place <- function(rownr, plaatsnaam, data){
         geheim_adres <- adressen[[glue("adres{i}")]][["GeheimAdres"]]
         adres_type <- adressen[[glue("adres{i}")]][["AdresType"]]
         verwijderd <- row$verwijderd
-        rowdf <- data.frame(insolventie_nummer,kvk_nummer,bedrijfsnaam,publicate_datum,straat,huisnr,huisnrtoevoeging,plaats,postcode,geheim_adres,adres_type,verwijderd)
+        rowdf <- data.frame(insolventie_nummer,kvk_nummer,bedrijfsnaam,publicatie_datum,straat,huisnr,huisnrtoevoeging,plaats,postcode,geheim_adres,adres_type,verwijderd)
         newdf <- rbind(newdf,rowdf)
       }
     }
@@ -88,11 +89,6 @@ shinsolventieregistr <- function(plaatsnaam){
 
   out <- dbGetQuery(con, glue("SELECT i.insolventie_nummer, i.kvk_nummer, i.recente_publicatie, i.adressen, i.verwijderd, i.bedrijfs_naam  FROM insolventies i WHERE EXISTS (SELECT value FROM json_each(i.adressen) a WHERE a.value->>'Plaats' = '{plaatsnaam}') AND i.kvk_nummer IS NOT NULL"))
   data <- data.frame(out)
-
-
-  pubdat <- jsonlite::stream_in(textConnection(data$recente_publicatie))
-  pubdat$PublicatieDatum
-
 
   df_list <- lapply(1:nrow(data), function(r_num) {get_unnested_df_by_place(r_num, plaatsnaam, data)})
   df_out_lapply <- do.call(rbind, df_list)
