@@ -4,7 +4,6 @@
 #' @param file Lokatie van het config bestand, normaal gezet via `options(shintobag_conf = /path/to/file)`
 #' @param pool Logical. Als TRUE, gebruikt `pool::dbPool`, anders `DBI::dbConnect`
 #' @export
-#' #test
 shinto_db_connection <- function(what,
                                  file = getOption("shinsolventie_conf", "conf/config.yml"),
                                  port = 5432,
