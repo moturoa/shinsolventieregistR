@@ -59,18 +59,18 @@ get_unnested_df_by_place <- function(rownr, plaatsnaam, data){
     for (i in 1:length(adressen)){
       cur_naam <- adressen[[glue("adres{i}")]][["Plaats"]]
       if(cur_naam == plaatsnaam){
-        insolventie_nummer = row$insolventie_nummer
-        kvk_nummer <- row$kvk_nummer
-        bedrijfsnaam <- row$bedrijfs_naam
-        publicatie_datum <- pubdat$PublicatieDatum
-        straat <- adressen[[glue("adres{i}")]][["Straat"]]
-        huisnummer <- adressen[[glue("adres{i}")]][["HuisNummer"]]
-        huisnummertoevoeging = adressen[[glue("adres{i}")]][["HuisNummerToevoegingen"]]
-        woonplaats <- adressen[[glue("adres{i}")]][["Plaats"]]
-        postcode <- adressen[[glue("adres{i}")]][["Postcode"]]
-        geheim_adres <- adressen[[glue("adres{i}")]][["GeheimAdres"]]
-        adres_type <- adressen[[glue("adres{i}")]][["AdresType"]]
-        verwijderd <- row$verwijderd
+        insolventie_nummer = as.character(row$insolventie_nummer)
+        kvk_nummer <- as.integer(row$kvk_nummer)
+        bedrijfsnaam <- as.character(row$bedrijfs_naam)
+        publicatie_datum <- as.Date(pubdat$PublicatieDatum)
+        straat <- as.character(adressen[[glue("adres{i}")]][["Straat"]])
+        huisnummer <- as.integer(adressen[[glue("adres{i}")]][["HuisNummer"]])
+        huisnummertoevoeging = as.character(adressen[[glue("adres{i}")]][["HuisNummerToevoegingen"]])
+        woonplaats <- as.character(adressen[[glue("adres{i}")]][["Plaats"]])
+        postcode <- as.character(adressen[[glue("adres{i}")]][["Postcode"]])
+        geheim_adres <- as.logical(adressen[[glue("adres{i}")]][["GeheimAdres"]])
+        adres_type <- as.character(adressen[[glue("adres{i}")]][["AdresType"]])
+        verwijderd <- as.logical(row$verwijderd)
         rowdf <- data.frame(insolventie_nummer,kvk_nummer,bedrijfsnaam,publicatie_datum,straat,huisnummer,huisnummertoevoeging,woonplaats,postcode,geheim_adres,adres_type,verwijderd)
         newdf <- rbind(newdf,rowdf)
       }
