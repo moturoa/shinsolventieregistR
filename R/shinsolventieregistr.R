@@ -51,7 +51,8 @@ get_unnested_df_by_place <- function(rownr, plaatsnaam, data){
                       postcode = character(),
                       geheim_adres = character(),
                       adres_type = character(),
-                      verwijderd = character())
+                      verwijderd = character(),
+                      stringsAsFactors = FALSE)
   if(nrow(data)>0){
     row <- data[rownr,]
     adressen <- data.frame(jsonlite::stream_in(textConnection(row$adressen)))
@@ -71,7 +72,7 @@ get_unnested_df_by_place <- function(rownr, plaatsnaam, data){
         geheim_adres <- as.logical(adressen[[glue("adres{i}")]][["GeheimAdres"]])
         adres_type <- as.character(adressen[[glue("adres{i}")]][["AdresType"]])
         verwijderd <- as.logical(row$verwijderd)
-        rowdf <- data.frame(insolventie_nummer,kvk_nummer,bedrijfsnaam,publicatie_datum,straat,huisnummer,huisnummertoevoeging,woonplaats,postcode,geheim_adres,adres_type,verwijderd)
+        rowdf <- data.frame(insolventie_nummer,kvk_nummer,bedrijfsnaam,publicatie_datum,straat,huisnummer,huisnummertoevoeging,woonplaats,postcode,geheim_adres,adres_type,verwijderd, stringsAsFactors = FALSE)
         newdf <- rbind(newdf,rowdf)
       }
     }
