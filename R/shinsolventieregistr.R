@@ -64,14 +64,14 @@ get_unnested_df_by_place <- function(rownr, plaatsnaam, data){
         bedrijfsnaam <- row$bedrijfs_naam
         publicatie_datum <- pubdat$PublicatieDatum
         straat <- adressen[[glue("adres{i}")]][["Straat"]]
-        huisnr <- adressen[[glue("adres{i}")]][["HuisNummer"]]
-        huisnrtoevoeging = adressen[[glue("adres{i}")]][["HuisNummerToevoegingen"]]
-        plaats <- adressen[[glue("adres{i}")]][["Plaats"]]
+        huisnummer <- adressen[[glue("adres{i}")]][["HuisNummer"]]
+        huisnummertoevoeging = adressen[[glue("adres{i}")]][["HuisNummerToevoegingen"]]
+        woonplaats <- adressen[[glue("adres{i}")]][["Plaats"]]
         postcode <- adressen[[glue("adres{i}")]][["Postcode"]]
         geheim_adres <- adressen[[glue("adres{i}")]][["GeheimAdres"]]
         adres_type <- adressen[[glue("adres{i}")]][["AdresType"]]
         verwijderd <- row$verwijderd
-        rowdf <- data.frame(insolventie_nummer,kvk_nummer,bedrijfsnaam,publicatie_datum,straat,huisnr,huisnrtoevoeging,plaats,postcode,geheim_adres,adres_type,verwijderd)
+        rowdf <- data.frame(insolventie_nummer,kvk_nummer,bedrijfsnaam,publicatie_datum,straat,huisnummer,huisnummertoevoeging,woonplaats,postcode,geheim_adres,adres_type,verwijderd)
         newdf <- rbind(newdf,rowdf)
       }
     }
